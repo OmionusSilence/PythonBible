@@ -1,0 +1,23 @@
+movies = {"Wall-E":["G", 2],
+          "Coraline":["PG", 30],
+          "Spaceballs":["PG", 30],
+          "Star Wars":["PG", 30],
+          "Star Wars: The Force Awakens":["PG-13",30],
+          "Alien":["R", 30]}
+
+ratings = {"G":0, "PG":5, "PG-13":13, "R":17}
+
+while True:
+    choice = input("What film would you like to see? ").strip().lower().title()
+    if choice in movies:
+        if movies[choice][1] > 0:
+            age = int(input("How old are you? ").strip())
+            if age >= ratings[movies[choice][0]]:
+                print("Enjoy the show.\n")
+                movies[choice][1] -= 1
+            else:
+                print("You are not old enough to see that film.\n")
+        else:
+            print("That movie is sold out.\n")
+    else:
+        print("Sorry we don't have that film.\n")
