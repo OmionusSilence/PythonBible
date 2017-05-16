@@ -1,0 +1,55 @@
+player_icons = {1:"X", 2:"O", "X":1, "O":2}
+run = True
+
+def is_win():
+    if board[0] == board[1] == board[2] or \
+        board[3] == board[4] == board[5] or \
+        board[6] == board[7] == board[8] or \
+        board[0] == board[3] == board[6] or \
+        board[1] == board[4] == board[7] or \
+        board[2] == board[5] == board[8] or \
+        board[0] == board[4] == board[8] or \
+        board[2] == board[4] == board[6]:
+        print_board()
+        return True
+    else:
+        return False
+
+def print_board():
+    print()
+    for i in range(0, 3):
+        print("{} | {} | {}".format(board[3 * i + 0], board[3 * i + 1], board[3 * i + 2]))
+
+def pick(icon):
+    valid = False
+    while not valid:
+        print_board()
+
+        choice = int(input("\nPlayer {} please select an available space from 1 to 9: ".format(player_icons[icon])))-1
+        if board[choice] in "123456789":
+            board[choice] = icon
+            valid = True
+            global count
+            count += 1
+        else:
+            print("Invalid move please try again.")
+    if is_win():
+        print("\nPlayer {} wins!".format(player_icons[icon]))
+        global win
+        win = True
+
+
+while run:
+    board = ["{}".format(x) for x in range(1,10)]
+    win = False
+    count = 0
+    while not win:
+        pick(player_icons[1])
+        if count == 9 and win != True:
+            print_board()
+            print("\nDraw!")
+            win = True
+        if not win:
+            pick(player_icons[2])
+
+    run = input("\nRun again? Y/N: ").lower()[0] != 'n'
