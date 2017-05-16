@@ -1,0 +1,66 @@
+import math
+
+class Account:
+    def __init__(self, name, balance, minimum_balance, **kwargs):
+        self.account_type = ""
+        for key,value in kwargs.items():
+            setattr(self, key, value)
+
+        self.name = name
+        self.balance = balance
+        self.minimum_balance = minimum_balance
+        self.transactions = ["${}".format(balance)]
+
+    def __str__(self):
+        return "{}'s{} account".format(self.name, self.account_type)
+
+    def deposit(self, amount):
+        self.balance+=amount
+        self.transactions.append("${}".format(amount))
+
+    def withdraw(self, amount):
+        if amount < self.balance:
+            self.balance-=amount
+            self.transactions.append("(${})".format(amount))
+        else:
+            print("Insufficient funds to complete that transaction")
+
+    def statement(self):
+        for i in self.transactions:
+            print(i)
+
+        print("\nAccount Balance: ${}".format(round(self.balance,2)))
+
+class Checking(Account):
+    def __init__(self, name, balance):
+        details = {
+            "account_type":" Checking"
+        }
+        super().__init__(name, balance, minimum_balance = -1000, **details)
+
+class MoneyMarket(Account):
+    def __init__(self, name, balance):
+        details = {
+            "interest_rate":.03,
+            "times_compounded_annually":12,
+            "account_type":" Money Market"
+        }
+        super().__init__(name, balance, minimum_balance = 0, **details)
+
+    def calculate_interest(self, months_passed):
+        for i in range(0, months_passed):
+            self.transactions.append("${}".format(round(self.balance*(self.interest_rate/self.times_compounded_annually),2)))
+            self.balance+= (self.balance * (self.interest_rate / self.times_compounded_annually))
+
+        self.statement()
+
+class Savings(Account):
+    def __init__(self, name, balance):
+        details = {
+            "account_type":" Savings"
+        }
+        super().__init__(name, balance, minimum_balance = 0, **details)
+
+an_account = MoneyMarket("Watson", 1000)
+an_account.calculate_interest(5)
+
